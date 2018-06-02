@@ -20,6 +20,6 @@ PiSH was developed to detect any anomalies (motion, fire,...) in image sequence.
 - Start or stop the system. Stop the PiSH system once when you come home, to avoid any false alarm.
 
 ## How to run
-Pish support either PiCamera or URL-Streaming, to define which one to use, please set the arrgument -s or --source to cam or stream1, stream2,...
+PiSH support either PiCamera or URL-Streaming, to define which one to use, please set the arguments ```-s or --source``` to cam or stream1, stream2,...
 
 
