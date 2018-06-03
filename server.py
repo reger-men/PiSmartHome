@@ -53,7 +53,7 @@ def start_service():
     if get_camera_pid() is None:
         print(get_camera_pid())
         print("Start service")
-        proc = subprocess.Popen(["python", "pi_surveillance.py", "-c", "conf.json", "-d", "True"])
+        proc = subprocess.Popen(["python", "pi_surveillance.py", "-c", "conf.json", "-s", "stream1", "-d", "False"])
         set_camera_pid(proc.pid)
         print("Process id {}".format(proc.pid))
     else:
@@ -90,4 +90,3 @@ if __name__ == "__main__":
         app.run(host="0.0.0.0", port=5555, debug=False, use_reloader=True)
     except Exception as e:
 	print(e)
-
