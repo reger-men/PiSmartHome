@@ -1,8 +1,8 @@
-# python pi_surveillance.py --conf conf.json --source cam
+# python pi_surveillance.py --conf conf.json
 
 # import the necessary packages
-from picamera.array import PiRGBArray #raspberry spec
-from picamera import PiCamera #raspberry spec
+#from picamera.array import PiRGBArray #raspberry spec
+#from picamera import PiCamera #raspberry spec
 from utils import send_email, TempImage
 import argparse
 import warnings
@@ -22,7 +22,7 @@ ap.add_argument("-d", "--debug", required=False,
 	help="debug mode on/off")
 args = vars(ap.parse_args())
 
-# filter warnings, load the configuration and initialize the Dropbox
+# filter warnings, load the configuration 
 # client
 warnings.filterwarnings("ignore")
 conf = json.load(open(args["conf"]))
@@ -37,14 +37,15 @@ else:
 
 # check whatever the source video is.
 if args['source'] == "stream1":
-	hoststr = "rtsp://service:Xbks8tr8vT@193.159.244.134"
+	hoststr = 'rtsp://operator:Onv!f2018@195.60.68.239:554/axis-media/media.amp?camera=1'
 	print 'Streaming ' + hoststr
 
 	cap = cv2.VideoCapture(hoststr)
+	
 	if (not cap.isOpened()):
-		print(cap.isOpened())
+		print('Error while open Stream url')
 
-else if args['source'] == "cam":
+else:
 	# initialize the camera and grab a reference to the raw camera capture
 	camera = PiCamera()
 	camera.resolution = tuple(conf["resolution"])
@@ -61,9 +62,14 @@ motionCounter = 0
 print('[INFO] PiSH started !!')
 
 # capture frames from the camera
-for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+#for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True): #raspberry spec
+while(True):
+	# Capture frame-by-frame
+    	ret, frame = cap.read()
+    	frame = cv2.resize(frame, (640,480), interpolation=cv2.INTER_AREA)
+	
 	# grab the raw NumPy array representing the image and initialize
-	frame = f.array
+	#frame = f.array
 	timestamp = datetime.datetime.now()
 	text = "No Motion detected"
 
@@ -75,23 +81,26 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	gray_ = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray_, tuple(conf['blur_size']), 0)
 
+	
         if debug_mode:
-	        #print("save debug images...")
-		cv2.imwrite("/home/pi/Desktop/Debug/gray.jpeg", gray_)
+		cv2.imwrite("gray.jpeg", gray_)
+		cv2.imwrite("blur.jpeg", gray)
 
 	# if the average frame is None, initialize it
 	if avg is None:
 		print "[INFO] starting background model..."
 		avg = gray.copy().astype("float")
-		rawCapture.truncate(0)
+		cv2.imwrite("avg.jpeg", avg)
+		#rawCapture.truncate(0) #raspberry spec
 		continue
 
 	# accumulate the weighted average between the current frame and
 	# previous frames, then compute the difference between the current
 	# frame and running average
 	frameDelta = cv2.absdiff(gray, cv2.convertScaleAbs(avg))
+	cv2.imwrite("frameDelta.jpeg", frameDelta)
 	cv2.accumulateWeighted(gray, avg, 0.5)
-
+	
 	# threshold the delta image, dilate the thresholded image to fill
 	# in holes, then find contours on thresholded image
 	thresh = cv2.threshold(frameDelta, conf["delta_thresh"], 255,
@@ -138,24 +147,12 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
                         # check to see if the number of frames with consistent motion is
                         # high enough
                         if motionCounter >= int(conf["min_motion_frames"]):
-                                # check to see if dropbox sohuld be used
-                                if conf["use_dropbox"]:
-                                        # write the image to temporary file
-                                        t = TempImage()
-                                        cv2.imwrite(t.path, frame)
-                                        # upload the image to Dropbox and cleanup the tempory image
-                                        print "[UPLOAD] {}".format(ts)
-                                        path = "{base_path}/{timestamp}.jpg".format(
-                                                base_path=conf["dropbox_base_path"], timestamp=ts)
-                                        client.put_file(path, open(t.path, "rb"))
-                                        t.cleanup()
-
                                 # send an email if enabled
                                 if conf["use_email"]:
                                         print("[INFO] Sending an alert email!!!")
                                         send_email(conf)
                                         print("[INFO] waiting {} seconds...".format(conf["camera_warmup_time"]))
-                                        time.sleep(conf["camera_warmup_time"])
+                                        #time.sleep(conf["camera_warmup_time"])
                                         print("[INFO] running")
 
                                 # update the last uploaded timestamp and reset the motion
@@ -182,5 +179,8 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 			break
 
 	# clear the stream in preparation for the next frame
-	rawCapture.truncate(0)
+	#rawCapture.truncate(0)#raspberry spec
 
+# When everything done, release the capture
+cap.release()
+cv2.destroyAllWindows()
