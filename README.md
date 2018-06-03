@@ -22,4 +22,7 @@ PiSH was developed to detect any anomalies (motion, fire,...) in image sequence.
 ## How to run
 PiSH support either PiCamera or URL-Streaming, to define which one to use, please set the arguments ```-s or --source``` to cam or stream1, stream2,...
 
+- ```python server.py ```
 
+OR run the surveillance directly.
+- ```python pi_surveillance.py -c conf.json -s stream1 ```
