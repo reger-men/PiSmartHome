@@ -90,7 +90,7 @@ while(True):
 	if avg is None:
 		print "[INFO] starting background model..."
 		avg = gray.copy().astype("float")
-		cv2.imwrite("avg.jpeg", avg)
+		#cv2.imwrite("avg.jpeg", avg)
 		#rawCapture.truncate(0) #raspberry spec
 		continue
 
@@ -98,7 +98,7 @@ while(True):
 	# previous frames, then compute the difference between the current
 	# frame and running average
 	frameDelta = cv2.absdiff(gray, cv2.convertScaleAbs(avg))
-	cv2.imwrite("frameDelta.jpeg", frameDelta)
+	#cv2.imwrite("frameDelta.jpeg", frameDelta)
 	cv2.accumulateWeighted(gray, avg, 0.5)
 	
 	# threshold the delta image, dilate the thresholded image to fill
