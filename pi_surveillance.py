@@ -44,6 +44,14 @@ if args['source'] == "stream1":
 	
 	if (not cap.isOpened()):
 		print('Error while open Stream url')
+if args['source'] == "stream2":
+	hoststr = 'rtsp://service:Xbks8tr8vT@193.159.244.132:554/?h26x=0' #?h26x=0 to select camera1
+	print 'Streaming ' + hoststr
+
+	cap = cv2.VideoCapture(hoststr)
+	
+	if (not cap.isOpened()):
+		print('Error while open Stream url')
 
 else:
 	# initialize the camera and grab a reference to the raw camera capture
