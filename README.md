@@ -27,4 +27,3 @@ PiSH support either PiCamera or URL-Streaming, to define which one to use, pleas
 OR run the surveillance directly.
 - ```python pi_surveillance.py -c conf.json -s stream1 ```
 
-http://193.159.244.132
