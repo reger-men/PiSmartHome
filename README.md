@@ -27,4 +27,3 @@ PiSH support either PiCamera or URL-Streaming, to define which one to use, pleas
 OR run the surveillance directly.
 - ```python pi_surveillance.py -c conf.json -s stream1 ```
 
-https://onvif-spotlight.bemyapp.com/#/projects/5b12b2dae67b8e00047120d3
