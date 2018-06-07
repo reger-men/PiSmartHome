@@ -24,7 +24,7 @@ class TempImage:
 
 def send_email(conf):
     #fromaddr = "noreply@pish.com" 
-    fromaddr = "khalidbenmahria@hotmail.com"
+    fromaddr = "YOUR EMAIL ADDRESS"
     for email_address in conf['email_address']:
         toaddrs  = email_address
         print("[INFO] Emailing to {}".format(email_address))
@@ -52,8 +52,8 @@ def send_email(conf):
                 msg.attach(part)
 
         # Credentials (if needed) : EDIT THIS
-        username = "khalidbenmahria@hotmail.com"
-        password = "karta123"
+        username = "YOUR EMAIL ADDRESS"
+        password = "YOUR PASSWORD"
 
         # The actual mail send
         server = smtplib.SMTP('smtp.live.com',587)
