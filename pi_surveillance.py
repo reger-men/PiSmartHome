@@ -11,6 +11,7 @@ import json
 import time
 import cv2
 import urllib2
+import sys
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -37,21 +38,34 @@ else:
 
 # check whatever the source video is.
 if args['source'] == "stream1":
-	hoststr = 'rtsp://operator:Onv!f2018@195.60.68.239:554/axis-media/media.amp?camera=1'
-	print 'Streaming ' + hoststr
+	username = raw_input("Please enter the username: ")
+	pw = raw_input("Please enter your password: ")
+	if not username or not pw:
+		print 'The Username or password has to be not empty!'
+		sys.exit()
+	else:
+        	hoststr = 'rtsp://' + username + ':' + pw + '@195.60.68.239:554/axis-media/media.amp?camera=1'
+		print 'Streaming ' + hoststr
 
-	cap = cv2.VideoCapture(hoststr)
+		cap = cv2.VideoCapture(hoststr)
 	
-	if (not cap.isOpened()):
-		print('Error while open Stream url')
+		if (not cap.isOpened()):
+			print('Error while open Stream url')
+	
 elif args['source'] == "stream2":
-	hoststr = 'rtsp://service:Xbks8tr8vT@193.159.244.132:554/?h26x=0' #?h26x=0 to select camera1
-	print 'Streaming ' + hoststr
+	username = raw_input("Please enter the username: ")
+        pw = raw_input("Please enter your password: ")
+        if not username or not pw:
+                print 'The Username or password has to be not empty!'
+                sys.exit()
+        else:
+		hoststr = 'rtsp://' + username + ':' + pw + '@193.159.244.132:554/?h26x=0' #?h26x=0 to select camera1
+		print 'Streaming ' + hoststr
 
-	cap = cv2.VideoCapture(hoststr)
+		cap = cv2.VideoCapture(hoststr)
 	
-	if (not cap.isOpened()):
-		print('Error while open Stream url')
+		if (not cap.isOpened()):
+			print('Error while open Stream url')
 
 else:
 	# initialize the camera and grab a reference to the raw camera capture
