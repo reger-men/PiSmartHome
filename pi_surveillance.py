@@ -41,7 +41,7 @@ if args['source'] == "stream1":
 	username = raw_input("Please enter the username: ")
 	pw = raw_input("Please enter your password: ")
 	if not username or not pw:
-		print 'The Username or password has to be not empty!'
+		print 'The Username and password cannot be empty!'
 		sys.exit()
 	else:
         	hoststr = 'rtsp://' + username + ':' + pw + '@195.60.68.239:554/axis-media/media.amp?camera=1'
@@ -56,7 +56,7 @@ elif args['source'] == "stream2":
 	username = raw_input("Please enter the username: ")
         pw = raw_input("Please enter your password: ")
         if not username or not pw:
-                print 'The Username or password has to be not empty!'
+                print 'The Username and password cannot be empty!'
                 sys.exit()
         else:
 		hoststr = 'rtsp://' + username + ':' + pw + '@193.159.244.132:554/?h26x=0' #?h26x=0 to select camera1
